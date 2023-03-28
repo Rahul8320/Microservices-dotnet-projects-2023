@@ -1,8 +1,54 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@model IEnumerable<ProductDto>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@if (User.Identity.IsAuthenticated)
+{
+    <form>
+        <div class="container row">
+
+            @foreach(var product in Model)
+            {
+                
+                <div class="col-4">
+                    <div class="p-0 my-3 border">
+                        <div class="card">
+                            @if (product.ImageUrl == null)
+                            {
+                                <img height="300px" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.jj9FgA0id5NE9nDl7u20hQHaED%26pid%3DApi&f=1&ipt=3c2779dbb69826f8848dcc5dba15a627ff77d594a1e88ae088b94005cb56c950&ipo=images" class="card-img-top" />
+                            }
+                            else
+                            {
+                                <img height="300px" src="@product.ImageUrl" class="card-img-top" />
+                            }
+                            <div class="card-body">
+                                <h3 class="card-title text-success">@product.Name</h3>
+                                <span class="badge badge-light mb-2">@product.CategoryName</span>
+                                <p class="card-text">@Html.Raw(product.Description)</p>
+                                <div class="row">
+                                    <div class="col pt-1">
+                                        <span style="font-size:23px;">@string.Format("{0:c}",product.Price)</span>
+                                    </div>
+                                    <div class="col">
+                                        <a asp-action="Details" asp-route-productId="@product.ProductId" class="btn btn-success form-control">Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+        </div>
+    </form>
+}
+else
+{
+    <span class="nav-item pt-lg-2">
+        Please
+        <a class="nav-link" asp-action="Login" asp-controller="Home">Login</a>
+        To View All Details.
+    </span>
+}

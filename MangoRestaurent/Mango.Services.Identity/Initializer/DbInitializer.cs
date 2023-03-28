@@ -38,8 +38,8 @@ namespace Mango.Services.Identity.Initializer
                 Email = "admin.ceo@gmail.com",
                 EmailConfirmed = true,
                 PhoneNumber = "1230000321",
-                FirstName = "Rahul",
-                LastName = "Dey"
+                FirstName = "CEO",
+                LastName = "ADMIN"
             };
 
             _userManager.CreateAsync(adminUser, "Ceo.Admin@123").GetAwaiter().GetResult();

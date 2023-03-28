@@ -37,7 +37,7 @@ namespace Mango.Services.Identity
                 ClientId="mango",
                 ClientSecrets={new Secret("mango webapp client".Sha256())},
                 AllowedGrantTypes = GrantTypes.Code,
-                RedirectUris={ "https://localhost:44353/signin-oidc" },
+                RedirectUris={ "https://localhost:7288/signin-oidc", "https://localhost:44353/signin-oidc" },
                 PostLogoutRedirectUris={"https://localhost:44353/signout-callback-oidc"},
                 AllowedScopes= new List<string>
                 {

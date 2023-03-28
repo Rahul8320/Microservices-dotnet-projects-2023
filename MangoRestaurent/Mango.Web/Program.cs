@@ -4,19 +4,39 @@ using Mango.Web.Services.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
-// add httpclient
+// -- add httpclient
 builder.Services.AddHttpClient<IProductService, ProductService>();
 SD.ProductAPIBase = builder.Configuration["ServiceUrls:ProductAPI"];
 
-// add scoped services
+// -- add scoped services
 builder.Services.AddScoped<IProductService, ProductService>();
+
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+
+// -- add authentication
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = "Cookies";
+        options.DefaultChallengeScheme = "oidc";
+    }).AddCookie("Cookies", c => c.ExpireTimeSpan=TimeSpan.FromMinutes(10))
+        .AddOpenIdConnect("oidc", options =>
+        {
+            options.Authority = builder.Configuration["ServiceUrls:IdentityAPI"];
+            options.GetClaimsFromUserInfoEndpoint = true;
+            options.ClientId = "mango";
+            options.ClientSecret = "mango webapp client";
+            options.ResponseType = "code";
+
+            options.TokenValidationParameters.NameClaimType = "name";
+            options.TokenValidationParameters.RoleClaimType = "role";
+            options.Scope.Add("mango");
+            options.SaveTokens = true;
+        });
 
 // auto refresh page after chnages
 #if DEBUG
-    builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 #endif
 
 var app = builder.Build();
@@ -33,6 +53,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+// -- add authenticate
+app.UseAuthentication();
 
 app.UseAuthorization();
 

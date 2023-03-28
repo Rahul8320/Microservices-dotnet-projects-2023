@@ -1,0 +1,62 @@
+﻿@model ProductDto
+
+@{
+    ViewData["Title"] = "Product Details Page";
+}
+
+<form method="post">
+    <input asp-for="ProductId" hidden />
+
+    <div class="pt-4">
+        <div class="container bg-dark d-flex p-2 px-4" style="border:1px solid #808080;">
+            <div class="col-6 d-flex">
+                <h1 class="text-white">@Model.Name</h1>
+            </div>
+            <div class="col-6 float-end">
+                <h1 class="text-warning text-end">@string.Format("{0:c}", Model.Price)</h1>
+            </div>
+        </div>
+        <div class="card-body border border-1 border-dark">
+            <div class="container rounded p-3">
+                <div class="row">
+                    <div class="col-12 col-lg-4 p-1 text-center">
+                        @if (Model.ImageUrl == null)
+                        {
+                            <img width="100%" style="border-radius:35px;" class="rounded" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.jj9FgA0id5NE9nDl7u20hQHaED%26pid%3DApi&f=1&ipt=3c2779dbb69826f8848dcc5dba15a627ff77d594a1e88ae088b94005cb56c950&ipo=images" />
+                        }
+                        else
+                        {
+                            <img width="100%" src="@Model.ImageUrl" style="border-radius:35px;" class="rounded" />
+                        }
+                    </div>
+                    <div class="col-12 col-lg-8">
+                        <div class="row pl-3">
+                            <div class="col-12">
+                                <span class="badge badge-primary text-success p-3 border">@Model.CategoryName</span>
+                                <h3 class="text-success"></h3>
+
+                                <p class="text-secondary">@Html.Raw(Model.Description)</p>
+                            </div>
+                        </div>
+                        <div class="row px-4">
+                            <input asp-for="Count" class="form-control" />
+                            <span asp-validation-for="Count" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container row bg-dark p-2" style="margin-left: 1px;">
+            <div class="col-12 col-md-6 pd-1">
+                <a class="btn btn-success btn-square form-control btn-lg" style="height: 50px;" asp-action="Index" asp-controller="Home" >Back to List</a>
+            </div>
+            <div class="col-12 col-md-6">
+                <button type="submit" class="btn btn-info form-control btn-lg" style="height: 50px">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
