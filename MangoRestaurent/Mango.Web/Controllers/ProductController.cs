@@ -32,14 +32,14 @@ namespace Mango.Web.Controllers
         }
 
         // get create product page
-        
+        [Authorize(Roles = "Admin")]
         public IActionResult ProductCreate()
         {
             return View();
         }
 
         // post create product data
-        
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ProductCreate(ProductDto model)
@@ -59,7 +59,7 @@ namespace Mango.Web.Controllers
         }
 
         // get edit product page
-        
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ProductEdit(int productId)
         {
             var accessToken = await HttpContext.GetTokenAsync("access_token");
@@ -75,7 +75,7 @@ namespace Mango.Web.Controllers
         }
 
         // post edit product data
-        
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ProductEdit(ProductDto model)
@@ -95,7 +95,7 @@ namespace Mango.Web.Controllers
         }
 
         // get delete product page
-        
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ProductDelete(int productId)
         {
             var accessToken = await HttpContext.GetTokenAsync("access_token");
@@ -111,7 +111,7 @@ namespace Mango.Web.Controllers
         }
 
         // post delete product data
-        
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ProductDelete(ProductDto model)

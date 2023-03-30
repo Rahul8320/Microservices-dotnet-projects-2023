@@ -19,15 +19,23 @@ namespace Mango.Services.ShoppingCartAPI.Repository
 
         public async Task<bool> ClearCart(string userId)
         {
-            var cartHeaderFromDb = await _db.CartHeaders.FirstOrDefaultAsync(x => x.UserId == userId);
-            if(cartHeaderFromDb != null)
+            try
             {
-                _db.CartDetails.RemoveRange(_db.CartDetails.Where(u => u.CartHeaderId == cartHeaderFromDb.CartHeaderId));
-                _db.CartHeaders.Remove(cartHeaderFromDb);
-                await _db.SaveChangesAsync();
-                return true;
+                var cartHeaderFromDb = await _db.CartHeaders.FirstOrDefaultAsync(x => x.UserId == userId);
+                if (cartHeaderFromDb != null)
+                {
+                    _db.CartDetails.RemoveRange(_db.CartDetails.Where(u => u.CartHeaderId == cartHeaderFromDb.CartHeaderId));
+                    _db.CartHeaders.Remove(cartHeaderFromDb);
+                    await _db.SaveChangesAsync();
+                    return true;
+                }
+                return false;
             }
-            return false;
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return false;
+            }
         }
 
         public async Task<CartDto> CreateUpdateCart(CartDto model)
@@ -35,8 +43,8 @@ namespace Mango.Services.ShoppingCartAPI.Repository
             Cart cart = _mapper.Map<Cart>(model);
 
             // Check if product exists in database, if not create it!
-            var prodInDb = _db.Products.FirstOrDefault(u => u.ProductId == model.CartDetails.FirstOrDefault().ProductId);
-            if (prodInDb != null)
+            var prodInDb = await _db.Products.FirstOrDefaultAsync(u => u.ProductId == model.CartDetails.FirstOrDefault().ProductId);
+            if (prodInDb == null)
             {
                 _db.Products.Add(cart.CartDetails.FirstOrDefault().Product);
                 await _db.SaveChangesAsync();
