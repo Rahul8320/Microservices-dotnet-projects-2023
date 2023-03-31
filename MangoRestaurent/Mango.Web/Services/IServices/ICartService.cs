@@ -8,6 +8,9 @@ namespace Mango.Web.Services.IServices
         Task<T> AddToCartAsnyc<T>(CartDto cartDto, string token = null);
         Task<T> UpdateCartAsnyc<T>(CartDto cartDto, string token = null);
         Task<T> RemoveFromCartAsnyc<T>(int cartId, string token = null);
-        Task<T> ClearCartAsnyc<T>(int userId, string token = null);
+        Task<T> ClearCartAsnyc<T>(string userId, string token = null);
+
+        Task<T> ApplyCoupon<T>(CartDto cartDto, string token = null);
+        Task<T> RemoveCoupon<T>(string userId, string token = null);
     }
 }
