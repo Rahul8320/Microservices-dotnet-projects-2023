@@ -1,0 +1,76 @@
+version: "3.9"
+services:
+  frontend:
+    image: rahuldey8320/mango-web:latest
+    ports:
+      - "8080:80"
+    environment:
+      ASPNETCORE_URLS: "http://+:80"
+      ASPNETCORE_ENVIRONMENT: "Development"
+  ocelot:
+    image: rahuldey8320/mango-gateway-solution:latest
+    environment:
+      ASPNETCORE_URLS: "http://+:5050"
+    depends_on:
+      - api1
+      - api2
+      - api3
+      - api4
+    ports:
+      - "5050:5050"
+  api1:
+    image: rahuldey8320/mango-service-indentity
+    environment:
+      ASPNETCORE_URLS: "http://+:80"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__MySql: "server=db1;database=MangoIdentityServer;user=root;password=pass"
+  api2:
+    image: rahuldey8320/mango-service-couponapi
+    environment:
+      ASPNETCORE_URLS: "http://+:80"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__MySql: "server=db2;database=MangoCouponAPI;user=root;password=pass"
+  api3:
+    image: rahuldey8320/mango-service-productapi
+    environment:
+      ASPNETCORE_URLS: "http://+:80"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__MySql: "server=db3;database=MangoProductAPI;user=root;password=pass"
+  api4:
+    image: rahuldey8320/mango-service-shoppingcartapi
+    environment:
+      ASPNETCORE_URLS: "http://+:80"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__MySql: "server=db4;database=MangoShoppingCartAPI;user=root;password=pass"
+  db1:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: MangoIdentityServer
+    volumes:
+      - db1:/var/lib/mysql
+  db2:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: MangoCouponAPI
+    volumes:
+      - db2:/var/lib/mysql
+  db3:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: MangoProductAPI
+    volumes:
+      - db3:/var/lib/mysql
+  db4:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: MangoShoppingCartAPI
+    volumes:
+      - db4:/var/lib/mysql
